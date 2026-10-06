@@ -4,7 +4,7 @@ class Hero:
     def __init__(self, name: str, attack: int):
         self.name = name
         self.attack = attack
-        self.health = 1000
+        self.health = 350
         self.dodge = 100 - self.attack
     
     def to_json(self):

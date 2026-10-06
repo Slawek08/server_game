@@ -4,6 +4,7 @@ import json
 import threading
 import random
 from hero import Hero
+import time 
 
 PORT = int(sys.argv[1])
 TOKEN_1 = sys.argv[2]
@@ -104,8 +105,8 @@ def execute_round_logic(t1, t2, move1, move2):
         p2["conn"].close()
         sys.exit(0)
 
-    current_round_moves[t1] = None
-    current_round_moves[t2] = None
+    # current_round_moves[t1] = None
+    # current_round_moves[t2] = None
     print("[BATTLE] Round processed. Moves reset for next round.")
 
 def handle_battle_client(player_token):
@@ -117,9 +118,23 @@ def handle_battle_client(player_token):
 
     while True:
         try:
+            # conn.send("CHOOSE_MOVE".encode())
+
+            # data = conn.recv(1024)
+            # if not data:
+            #     break
+
+            # move = data.decode().strip().lower()
+
+            with battle_lock:
+                if current_round_moves[player_token] is not None:
+                    time.sleep(0.1)
+                    continue
+
             conn.send("CHOOSE_MOVE".encode())
 
             data = conn.recv(1024)
+
             if not data:
                 break
 
@@ -137,6 +152,11 @@ def handle_battle_client(player_token):
                     print("[BATTLE] Both players made a move! Calculating results...")
 
                     execute_round_logic(tokens[0], tokens[1], move1, move2)
+                
+                    current_round_moves[tokens[0]] = None
+                    current_round_moves[tokens[1]] = None
+
+                    print("[BATTLE] Round processed. Moves reset for next round.")
 
         except Exception as e:
             print(f"[BATTLE] Error handling player {name}: {e}")
