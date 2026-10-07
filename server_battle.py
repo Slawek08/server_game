@@ -105,8 +105,6 @@ def execute_round_logic(t1, t2, move1, move2):
         p2["conn"].close()
         sys.exit(0)
 
-    # current_round_moves[t1] = None
-    # current_round_moves[t2] = None
     print("[BATTLE] Round processed. Moves reset for next round.")
 
 def handle_battle_client(player_token):
@@ -118,14 +116,6 @@ def handle_battle_client(player_token):
 
     while True:
         try:
-            # conn.send("CHOOSE_MOVE".encode())
-
-            # data = conn.recv(1024)
-            # if not data:
-            #     break
-
-            # move = data.decode().strip().lower()
-
             with battle_lock:
                 if current_round_moves[player_token] is not None:
                     time.sleep(0.1)
